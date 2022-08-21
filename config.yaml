@@ -1,0 +1,28 @@
+# The mergerfs view unionized on the two tiers below. This is necessary for matching the file paths to the tier locations
+mergerLocation: /merged/Music
+# The hot tier is where frequently accessed and recently added media reside
+hotTierLocation: /data/Music
+# The cold tier is where rarely accessed and stale media reside
+coldTierLocation: /remote/Music
+# How many days to consider for the current time-window to evaluate the play count
+playCountWindow: 30
+# How many times a media item has to be played in order to be moved to the hot tier
+minPlayCount: 2
+# An upper threshold in kbit/s of bitrate for media to be moved to cold tier
+# media that exceed this threshold will not be moved to the cold tier
+bitrateThreshold: 0
+# Expose various prometheus metrics about the internal state on port 9090
+enableMetrics: true
+
+## Plex connection
+# MyPlex username
+username: foo
+# MyPlex password
+password: bar
+# Plex server to connect to
+server: myserver
+# Which libraries to monitor. Ideally, these should all only contain locations in the mergerfs view of the two tiers defined above, otherwise they will not be actionable
+libraries:
+  - Music
+
+# TODO: direct LAN-whitelisted address as alternative?
