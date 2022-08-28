@@ -1,18 +1,27 @@
 # The mergerfs view unionized on the two tiers below. This is necessary for matching the file paths to the tier locations
 mergerLocation: /merged/Music
-# The hot tier is where frequently accessed and recently added media reside
+# The hot tier is where frequently accessed and recently added media reside. This must be the same path as plex sees it and what the daemon sees
 hotTierLocation: /data/Music
 # The cold tier is where rarely accessed and stale media reside
 coldTierLocation: /remote/Music
-# How many days to consider for the current time-window to evaluate the play count
-playCountWindow: 30
 # How many times a media item has to be played in order to be moved to the hot tier
-minPlayCount: 2
+minPlayCount: 1
 # An upper threshold in kbit/s of bitrate for media to be moved to cold tier
 # media that exceed this threshold will not be moved to the cold tier
-bitrateThreshold: 0
+bitrateThreshold: 20000
 # Expose various prometheus metrics about the internal state on port 9090
 enableMetrics: true
+
+# Whether the daemon should run a full scan on startup. A full scan means:
+# - get all items in each library (very slow)
+# - process all items (check which items need to be moved, move if necessary, very I/O heavy)
+# Mainly useful for initially moving all stale objects to cold storage for initial housekeeping, can be disabled afterwards in favor of incremental searches
+initialFullScan: true
+
+# How often to run the search for recently played objects
+refreshInterval: 2h
+# How many days to consider for the current time-window to evaluate the play count
+playCountWindow: 30d
 
 ## Plex connection
 # MyPlex username
