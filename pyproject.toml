@@ -20,7 +20,8 @@ classifiers = [
 dependencies = [
     "plexapi >= 4.12.1",
     "PyYAML >= 6.0",
-    "prometheus-client >= 0.14.1"
+    "prometheus-client >= 0.14.1",
+    "parsedatetime >= 2.6"
 ]
 
 
