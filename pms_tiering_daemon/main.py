@@ -14,8 +14,10 @@ METRIC_PREFIX = 'pms_tiering_'
 
 
 def main():
+    logging.basicConfig()
+    logging.getLogger().setLevel(logging.INFO)
     logging.info("Loading configuration...")
-    with open("config.yaml", "r") as yamlfile:
+    with open("/tmp/config.yaml", "r") as yamlfile:
         config = yaml.load(yamlfile, Loader=yaml.FullLoader)
         # Run some sanity checks
         if config["mergerLocation"] == config["hotTierLocation"]:

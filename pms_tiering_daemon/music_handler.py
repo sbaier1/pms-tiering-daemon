@@ -24,8 +24,9 @@ class MusicHandler:
         self.cal = pdt.Calendar()
 
     def initialize(self):
-        self.refresh_timeframe()
+        logging.info(f"Starting music handler for library {self.library.title}")
         if self.config["initialFullScan"]:
+            self.refresh_timeframe()
             logging.info(f"Starting a full scan for library {self.library.title}")
             start_millis = int(round(time.time() * 1000))
             with self.init_time_metric.time():
@@ -41,8 +42,10 @@ class MusicHandler:
         Timer(self.refresh_interval, self.refresh_tracks).start()
 
     def refresh_tracks(self):
-        self.refresh_timeframe()
-        # TODO: run the search filtering for the playback timeframe. pass the tracks to handle tracks.
+        # run the search filtering for the playback timeframe. pass the tracks to handle tracks.
+        recentlyPlayed = self.library.searchTracks(filters={"lastViewedAt>>": self.config["refreshInterval"]})
+        for track in recentlyPlayed:
+            self.handle_track(track)
         Timer(self.refresh_interval, self.refresh_tracks).start()
 
     def handle_track(self, track):
@@ -52,7 +55,9 @@ class MusicHandler:
             medium = track.media[0]
             if bitrate_threshold > 0:
                 bitrate = medium.bitrate
-                if bitrate > bitrate_threshold:
+                if bitrate is None or bitrate > bitrate_threshold:
+                    if bitrate is None:
+                        logging.debug(f"bitrate for track {track} was unknown")
                     self.bitrate_threshold_exceeded.inc()
                     return
 
